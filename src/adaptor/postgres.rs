@@ -133,7 +133,7 @@ WHERE name = $1;
 ";
 
 pub const INIT_UP_SQL: &str = "\
-CREATE TABLE movine_migrations (
+CREATE TABLE IF NOT EXISTS movine_migrations (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),

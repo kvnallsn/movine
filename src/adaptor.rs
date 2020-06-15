@@ -10,6 +10,7 @@ pub use self::postgres::PostgresAdaptor;
 pub use sqlite::SqliteAdaptor;
 
 pub trait DbAdaptor {
+    fn is_initialized(&mut self) -> Result<bool>;
     fn init_up_sql(&self) -> &'static str;
     fn init_down_sql(&self) -> &'static str;
     fn load_migrations(&mut self) -> Result<Vec<Migration>>;

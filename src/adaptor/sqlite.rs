@@ -22,6 +22,24 @@ impl SqliteAdaptor {
 }
 
 impl DbAdaptor for SqliteAdaptor {
+    fn is_initialized(&mut self) -> Result<bool> {
+        let sql = "
+            SELECT name
+            FROM sqlite_master
+            WHERE type='table'
+            AND name='movine_migrations';
+        ";
+
+        let mut stmt = self.conn.prepare(&sql)?;
+        let rows: std::result::Result<Vec<String>, _> =
+            stmt.query_map(params![], |row| Ok(row.get(0)?))?.collect();
+
+        match rows {
+            Ok(rows) if rows.len() == 1 => Ok(true),
+            _ => Ok(false),
+        }
+    }
+
     fn init_up_sql(&self) -> &'static str {
         INIT_UP_SQL
     }

@@ -60,6 +60,21 @@ impl PostgresAdaptor {
 }
 
 impl DbAdaptor for PostgresAdaptor {
+    fn is_initialized(&mut self) -> Result<bool> {
+        let sql = "
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = 'movine_migrations'
+            );
+        ";
+        let rows = self.conn.query(sql, &[])?;
+
+        match rows.len() {
+            1 => Ok(rows[0].get::<&str, bool>("exists")),
+            _ => Ok(false),
+        }
+    }
+
     fn init_up_sql(&self) -> &'static str {
         INIT_UP_SQL
     }

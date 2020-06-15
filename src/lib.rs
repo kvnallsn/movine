@@ -88,6 +88,10 @@ impl Movine {
         self
     }
 
+    pub fn is_initialized(&mut self) -> Result<bool> {
+        self.adaptor.is_initialized()
+    }
+
     pub fn initialize(&mut self) -> Result<()> {
         let file_handler = FileHandler::new(&self.migration_dir);
         file_handler.create_migration_directory()?;
